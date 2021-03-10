@@ -130,111 +130,99 @@ Config["Panels"] = {
 
 -- List of spells that do not need to be displayed
 Config["BlackList"] = {
+    ----------------------------------------------------------------
+    -- Druid
+    ----------------------------------------------------------------
+    [1126] = true,              -- Mark of the Wild (Rank 1)
+    [5232] = true,              -- Mark of the Wild (Rank 2)
+    [6756] = true,              -- Mark of the Wild (Rank 3)
+    [5234] = true,              -- Mark of the Wild (Rank 4)
+    [8907] = true,              -- Mark of the Wild (Rank 5)
+    [9884] = true,              -- Mark of the Wild (Rank 6)
+    [9885] = true,              -- Mark of the Wild (Rank 7)
+
+    [21849] = true,             -- Gift of the Wild (Rank 1)
+    [21850] = true,             -- Gift of the Wild (Rank 2)
+
+    [24932] = true,             -- Leader of the Pack
+
+    [5487] = false,             -- Bear Form
 
     ----------------------------------------------------------------
     -- Mage
     ----------------------------------------------------------------
-    [1459] = true,                  -- Arcane Intellect
+    [1459] = true,              -- Arcane Intellect (Rank 1)
+    [1460] = true,              -- Arcane Intellect (Rank 2)
+    [1461] = true,              -- Arcane Intellect (Rank 3)
+    [10156] = true,             -- Arcane Intellect (Rank 4)
+    [10157] = true,             -- Arcane Intellect (Rank 5)
 
     ----------------------------------------------------------------
     -- Priest
     ----------------------------------------------------------------
-    [21562] = true,                 -- Power Word: Fortitude
+    [1243] = true,              -- Power Word: Fortitude (Rank 1)
+    [1244] = true,              -- Power Word: Fortitude (Rank 2)
+    [1245] = true,              -- Power Word: Fortitude (Rank 3)
+    [2791] = true,              -- Power Word: Fortitude (Rank 4)
+    [10937] = true,             -- Power Word: Fortitude (Rank 5)
+    [10938] = true,             -- Power Word: Fortitude (Rank 6)
+
+    [976] = true,               -- Shadow Protection (Rank 1)
+    [10957] = true,             -- Shadow Protection (Rank 2)
+    [10958] = true,             -- Shadow Protection (Rank 3)
+
+    [27681] = true,             -- Prayer of Spirit (Rank 1)
+    [14818] = true,             -- Prayer of Spirit (Rank 2)
+    [14819] = true,             -- Prayer of Spirit (Rank 3)
+    [27841] = true,             -- Prayer of Spirit (Rank 4)
+
+    [21562] = true,             -- Prayer of Fortitude (Rank 1)
 
     ----------------------------------------------------------------
-    -- Paladin
+    -- Warlock
     ----------------------------------------------------------------
-    [465] = true,                   -- Power Word: Fortitude
+    [11766] = true,             -- Blood Pact
+    [11767] = true,             -- Blood Pact
+    [19480] = true,             -- Paranoia
+
+    ----------------------------------------------------------------
+    -- Shaman
+    ----------------------------------------------------------------
+    [5672] = true,              -- Healing Stream
+    [8163] = true,              -- Strength of Earth
+    [8836] = true,              -- Grace of Air
+    [10491] = true,             -- Mana Spring
 
     ----------------------------------------------------------------
     -- General
     ----------------------------------------------------------------
-    -- World Buffs
-    [72221] = true,                 -- Luck of the Draw
+    [15007] = true,             -- Ressurection Sickness
+    [16609] = true,             -- Warchief's Blessing
+    [22888] = true,             -- Rallying Cry of the Dragonslayer
+    [1135] = true,              -- Drink
+    [1137] = true,              -- Drink
+    [1117] = true,              -- Food
 
-    [331079] = true,                -- Trainee
-    [186401] = true,                -- Sign of the Skirmisher
-    [186406] = true,                -- Sign of the Critter
-    [225788] = true,                -- Sign of the Emissary
-    [335148] = true,                -- Sign of the Twisting Nether
-    [335151] = true,                -- Sign of the Mists
-    [335152] = true,                -- Sign of Iron
-
-    -- Food
-    [257427] = true,                -- Food & Drink
-    [257410] = true,                -- Well Fed
-    [288075] = true,                -- Well Fed
-
-    -- Costumes
-    [93095] = true,                 -- Burgy Blackheart's Handsome Hat
-    [160331] = true,                -- Blood Elf Illusion
-    [331462] = true,                -- Stinky
+    [8098] = true,              -- Intellect (Scroll III)
 }
 
 Config["Cooldowns"] = {
     ["PRIEST"] = {
         -- All
         [10060] = true,             -- Power Infusion
-        [19236] = true,             -- Desperate Prayer
-        [34433] = true,             -- Shadowfiend
-        [73325] = true,             -- Leap of Faith
 
         -- Disciplie
-        [33206] = true,             -- Pain Suppression
-        [47536] = true,             -- Rapture
-        [62618] = true,             -- Power Word: Barrier
-        [109964] = true,            -- Spirit Shell
-        [120517] = true,            -- Halo
-        [194509] = true,            -- Power Word: Radiance
-        [246287] = true,            -- Evangelism
-
+        [14751] = true              -- Inner Focus
         -- Holy
-        [2050] = true,              -- Holy Word: Serenity
-        [64901] = true,             -- Symbol of Hope
-        [34861] = true,             -- Holy Word: Sanctify
-        [33076] = true,             -- Prayer of Mending
-        [47788] = true,             -- Guardian Spirit
-        [64843] = true,             -- Divine Hymn
-        [200183] = true,            -- Apotheosis
-        [204883] = false,           -- Circle of Healing
-
         -- Shadow
-        [15286] = true,             -- Vampiric Embrace
-        [47585] = true,             -- Dispersion
-        [205369] = true             -- Mind Bomb
-    },
-    ["MONK"] = {
-        -- All
-        [116841] = true,            -- Tiger Lust
-        [322101] = false,           -- Expel Harm
-
-        -- Brewmaster
-        [322507] = true,            -- Celestial Brew
-        [115203] = true,            -- Fortifying Brew
-        [119582] = true,            -- Purifiying Brew
-        [122278] = true,            -- Dumpen Harm
-        [132578] = true,            -- Invoke Niuzao, the Black Ox
-
-        -- Kyrian
-        [310454] = true             -- Weapons of Order
     },
     ["ALL"] = {
         -- Horde Racials
         [20549] = true,             -- War Stomp (Tauren)
         [20572] = true,             -- Blood Fury (Orc)
         [26297] = true,             -- Berserking (Troll)
-        [28730] = true,             -- Arcane Torrent (Blood Elf)
-        [33697] = true,             -- Blood Fury (Orc)
-        [255654] = true,            -- Bull Rush (Highmountain Tauren)
 
         -- Alliance Racials
-        [20594] = true,             -- Stoneform (Dwarf)
-        [265221] = true,            -- Fireblood Fury (Dark Iron Dwarf)
-
-        -- Kyrian
-        [324739] = false,           -- Summon Steward
-
-        -- Ventyr
-        [323673] = true,            -- Mindgames
+        [20594] = true              -- Stoneform (Dwarf)
     }
 }

@@ -1,9 +1,10 @@
 local _, ns = ...
 local Filger = ns.Filger
 local Config = ns.Config
-local SpellList = ns.SpellList
 local Panels = Config.Panels
 local BlackList = Config.BlackList
+
+local LCD = Filger.LCD
 
 local VISIBLE = 1
 local HIDDEN = 0
@@ -178,80 +179,60 @@ local function IsDispelable(DebuffType, TargetIsPlayer, TargetIsEnemy, isDebuff)
 
     if (TargetIsEnemy and isDebuff) or (TargetIsFriendly and (not isDebuff)) then return false end
 
-    -- Blood Elf: Arcane Torrent (155145): removes 1 beneficial magic effect from enemy target.
-    -- Dark Iron Dwarf: Fireblood (265221): removes all magic, disease, curse, poison and bleed from player.
-    -- Dwarf: Stoneform (20594): removes all magic, disease, curse, poison and bleed effects from player.
-    local RacialAbility = (IsSpellKnown(155145) and (DebuffType == "Magic") and TargetIsEnemy) or
-        (IsSpellKnown(20594) or IsSpellKnown(265221) and  (
-            DebuffType == "Magic" or
-            DebuffType == "Disease" or
-            DebuffType == "Curse" or
-            DebuffType == "Poison" or
-            DebuffType == "Bleed"
-        ) and TargetIsPlayer)
-
-    local Ability = nil
-    if (class == "DEMONHUNTER") then
-        -- Consume Magic (278326): remove 1 beneficial magic effect from enemy target.
-        Ability = (DebuffType == "Magic") and IsSpellKnown(278326) and TargetIsEnemy and (not isDebuff)
-    elseif (class == "DRUID") then
-        -- Soothe (2908): removes enrage from enemy target.
-        -- Remove Corruption (2782): removes harmful curse and poison effects from friendly target.
-        -- Nature's Cure (88423): removes harmful magic, curse and poison effects from friendly targets.
-        Ability =  TargetIsFriendly and (
-            ((DebuffType == "Magic") and IsSpellKnown(88423)) or
-            ((DebuffType == "Curse") and (IsSpellKnown(2782) or IsSpellKnown(88423)))) or
-            ((DebuffType == "Poison") and (IsSpellKnown(2782) or IsSpellKnown(88423))) or
-            (TargetIsEnemy and (DebuffType == "Enrage") and IsSpellKnown(88423))
+    if (class == "DRUID") then
+        -- Abolish Poison (Poison) = 2893
+        -- Cure Poison (Poison) = 8946
+        -- Remove Curse (Curse) = 2782
+        -- Soothe Animal (Enrage) = 2908
+        return (
+            (DebuffType == "Poison" and (IsSpellKnown(2893) or IsSpellKnown(8946))) or
+            (DebuffType == "Curse" and (IsSpellKnown(2782))) or
+            (DebuffType == "Enrage" and IsSpellKnown(2908))
+        )
     elseif (class == "HUNTER") then
-        -- Tranquilizing Shot (19801): removes enrage and 1 magic effect from enemy target.
-        -- Mending Bandage (212640 - PvP): removes bleed, poison and disease effects from friendly target.
-        Ability =  (TargetIsEnemy and ((DebuffType == "Enrage") or (DebuffType == "Magic")) and IsSpellKnown(19801)) or
-            (TargetIsFriendly and ((DebuffType == "Bleed") or (DebuffType == "Poison") or (DebuffType == "Disease")) and IsSpellKnown(212640))
-    elseif (class == "MAGE") then
-        -- Remove Curse (475): removes all curses from friendly target.
-        Ability = (DebuffType == "Curse") and IsSpellKnown(475) and TargetIsFriendly
-    elseif (class == "MONK") then
-        -- Detox (218164): removes all magic, poison and disease effects from friendly target.
-        local Detox = 218164
-        Ability = IsSpellKnown(Detox) and (
-            (DebuffType == "Poison") or
-            (DebuffType == "Disease")
-        ) and IsSpellKnown(Detox) and TargetIsFriendly
+        -- Tranquilizing Shot (Frenzy) = 19801
+        return (DebuffType == "Enrage" and IsSpellKnown(19801))
     elseif (class == "PALADIN") then
-        -- Cleanse (4987): removes magic, disease and poison effects from friendly target.
-        -- Cleanse Toxins (213644): removes disease and poison effects from friendly target.
-        Ability = TargetIsFriendly and
-            ((DebuffType == "Magic") and IsSpellKnown(4987)) or
-            ((DebuffType == "Disease") and (IsSpellKnown(4987) or IsSpellKnown(213644))) or
-            ((DebuffType == "Poison") and (IsSpellKnown(4987) or IsSpellKnown(213644)))
+        -- Cleanse (Poison, Disease, Magic) = 4987
+        -- Purify (Disease, Poison) = 1152
+        return (
+            ((DebuffType == "Poison" or DebuffType == "Disease" or DebuffType == "Magic") and IsSpellKnown(4987)) or
+            ((DebuffType == "Poison" or DebuffType == "Disease") and IsSpellKnown(1152))
+        )
     elseif (class == "PRIEST") then
-        -- Purify (527): removes magic and disease effects from friendly/enemy target.
-        -- Dispel Magic (528): removes one magic effect from enemy target.
-        -- Mass Dispel (32375): removes all magic effects from 5 friendly targets and 1 beneficial magic spell from enemy target
-        -- Purify Disease (213634): removes all disease effects from friendly target.
-        local Purify = 527
-        local DispelMagic = 528
-        local MassDispel = 32375
-        local PurifyDisease = 213634
-        Ability = ((DebuffType == "Magic" or DebuffType == "Disease") and IsSpellKnown(Purify)) or
-            ((DebuffType == "Magic") and IsSpellKnown(DispelMagic) and TargetIsEnemy) or
-            ((DebuffType == "Magic") and IsSpellKnown(MassDispel) and ((TargetIsFriendly and isDebuff) or (TargetIsEnemy and (not isDebuff)))) or
-            ((DebuffType == "Disease") and IsSpellKnown(PurifyDisease) and TargetIsFriendly)
+        -- Dispel Magic Rank 1 (Magic) = 527
+        -- Dispel Magic Rank 2 (Magic) = 988
+        -- Cure Disease (Disease) = 528
+        -- Abolish Disease (Disease) = 552
+        return (
+            (DebuffType == "Magic" and (IsSpellKnown(527) or IsSpellKnown(988))) or
+            (DebuffType == "Disease" and (IsSpellKnown(528) or IsSpellKnown(552)))
+        )
     elseif (class == "SHAMAN") then
-        -- Purge (370): removes 1 beneficial magic effect from enemy target.
-        -- Purify Spirit (77130): removes all curses and magic from friendly target.
-        -- Cleanse Spirit (51886): removes all curses from friendly target.
-        Ability = ((DebuffType == "Magic") and IsSpellKnown(370) and TargetIsEnemy and (not isDebuff)) or
-            ((DebuffType == "Magic") and IsSpellKnown(77130) and TargetIsFriendly) or
-            ((DebuffType == "Curse") and (IsSpellKnown(77130) or IsSpellKnown(51886)) and TargetIsFriendly)
+        -- Purge Rank 1 (Magic) = 370
+        -- Purge Rank 2 (Magic) = 8012
+        -- Cure Poison (Poison) = 526
+        -- Poison Cleansing Totem (Poison) = 8166
+        -- Cure Disease (Disease) = 2870
+        return (
+            (DebuffType == "Magic" and (IsSpellKnown(370) or IsSpellKnown(8012))) or
+            (DebuffType == "Poison" and (IsSpellKnown(526) or IsSpellKnown(8166))) or
+            (DebuffType == "Disease" and IsSpellKnown(2870))
+        )
     elseif (class == "WARLOCK") then
-        -- Devour Magic - Felhunter (19505): removes 1 beneficial magic effect from enemy target.
-        -- Singe Magic - Imp (89808): removes harmful magic effects from friendly target.
-        Ability = ((DebuffType == "Magic") and IsSpellKnown(19505, true) and TargetIsEnemy and (not isDebuff)) or
-            ((DebuffType == "Magic") and IsSpellKnown(89808, true) and TargetIsFriendly and (isDebuff))
+        -- Felhunter
+        -- Devour Magic Rank 1 (Magic) = 19505
+        -- Devour Magic Rank 2 (Magic) = 19731
+        -- Devour Magic Rank 3 (Magic) = 19734
+        -- Devour Magic Rank 4 (Magic) = 19736
+        local hasDevourMagic = (
+            IsSpellKnown(19505, true) or
+            IsSpellKnown(19731, true) or
+            IsSpellKnown(19734, true) or
+            IsSpellKnown(19736, true)
+        )
+        return (DebuffType == "Magic" and hasDevourMagic)
     end
-    return RacialAbility or Ability
 end
 
 local function CustomFilter(element, unit, aura, ...)
@@ -312,6 +293,14 @@ local function UpdateAura(element, unit, index, offset, filter, isDebuff, visibl
         timeMod, effect1, effect2, effect3 = UnitAura(unit, index, filter)
 
     if (not name) then return end
+
+    -- classic UnitAura do not return duration and expiration parameters
+    if (not duration or duration == 0) then
+        local duration_lcd, expiration_lcd = LCD:GetAuraDurationByUnit(unit, spellID, caster, name)
+        if (duration_lcd and duration_lcd > 0) then
+            duration, expiration = duration_lcd, expiration_lcd
+        end
+    end
 
     local position = visible + offset + 1
     local aura = element[position]

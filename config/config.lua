@@ -207,14 +207,27 @@ Config["BlackList"] = {
 }
 
 Config["Cooldowns"] = {
+    ["PALADIN"] = {
+        -- All
+        [498] = true,               -- Divine Protection
+        [642] = true,               -- Divine Shield
+        [633] = true,               -- Lay on Hands
+
+        -- Protection
+    },
     ["PRIEST"] = {
         -- All
         [10060] = true,             -- Power Infusion
 
         -- Disciplie
         [14751] = true              -- Inner Focus
+        
         -- Holy
         -- Shadow
+    },
+    ["WARRIOR"] = {
+        -- All
+        -- Protection
     },
     ["ALL"] = {
         -- Horde Racials

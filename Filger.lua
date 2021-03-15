@@ -9,14 +9,12 @@ local LCD = Filger.LCD
 local VISIBLE = 1
 local HIDDEN = 0
 
-local UnitAura = UnitAura
-local UnitIsEnemy = UnitIsEnemy
-local IsSpellKnown = IsSpellKnown
+-- wow api
 local CreateFrame = CreateFrame
-local GameTooltip = GameTooltip
-
-local GetSpellInfo, GetItemInfo, GetInventoryItemLink = GetSpellInfo, GetItemInfo, GetInventoryItemLink
+local UnitAura, UnitIsEnemy, GameTooltip = UnitAura, UnitIsEnemy, GameTooltip
+local GetSpellInfo, IsSpellKnown = GetSpellInfo, IsSpellKnown
 local GetSpellCooldown, GetSpellBaseCooldown = GetSpellCooldown, GetSpellBaseCooldown
+local GetItemInfo, GetInventoryItemLink = GetItemInfo, GetInventoryItemLink
 
 ----------------------------------------------------------------
 -- Filger
@@ -261,7 +259,7 @@ function Filger:PostUpdateAura(element, unit, aura, index, position, duration, e
     -- return true or false if aura can be dispeled by the player
     -- 1. dispel harmful effects from friendly target.
     -- 2. dispell beneficial effects from enemy target.
-    local isDispelable = IsDispelable(debuffType, aura.isPlayer, targetIsEnemy, isDebuff)
+    local isDispelable = (not aura.casterIsPlayer) and IsDispelable(debuffType, aura.isPlayer, targetIsEnemy, isDebuff)
 
     -- set border color by aura type, if it's dispelable.
     if (isDispelable or isStealable) then

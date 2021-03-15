@@ -1,8 +1,7 @@
 ## Interface: 11306
-## Author: Nils Ruesch, Affli
+## Author: Luaerror
 ## Credits: Nils Ruesch, Shestak, Affli, Garagar, hidekki, FourOne
-## Editor: Luaerror
-## Version: 1.1
+## Version: 1.2
 ## Title: |cffb3ff19Filger Classic|r
 ## Notes: Minimal buff/debuff tracker
 ## Website: https://github.com/PedroZC90/Filger/tree/classic

@@ -1,5 +1,8 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
 
+	<!-- Libraries -->
+	<include file="libs\init.xml"/>
+
 	<!-- Engine	 -->
 	<Script file="core\init.lua"/>
 

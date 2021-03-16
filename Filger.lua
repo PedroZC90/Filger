@@ -253,16 +253,16 @@ end
 function Filger:PostUpdateAura(element, unit, aura, index, position, duration, expiration, debuffType, isDebuff, isStealable)
 
     local targetIsEnemy = UnitIsEnemy(unit or "player", "player")
-    local casterIsEnemy = UnitIsEnemy(caster or "player", "player")
+    local casterIsEnemy = UnitIsEnemy(aura.caster or "player", "player")
     local casterIsFriendly = not casterIsEnemy
 
     -- return true or false if aura can be dispeled by the player
     -- 1. dispel harmful effects from friendly target.
     -- 2. dispell beneficial effects from enemy target.
-    local isDispelable = (not aura.casterIsPlayer) and IsDispelable(debuffType, aura.isPlayer, targetIsEnemy, isDebuff)
+    local isDispellable = (not aura.casterIsPlayer) and IsDispelable(debuffType, aura.isPlayer, targetIsEnemy, isDebuff)
 
     -- set border color by aura type, if it's dispelable.
-    if (isDispelable or isStealable) then
+    if (isDispellable or isStealable) then
         aura.Backdrop:SetBorderColor(unpack(DebuffTypeColors[debuffType or "Unknown"]))
     else
         aura.Backdrop:SetBorderColor(unpack(BorderColor))
@@ -270,7 +270,7 @@ function Filger:PostUpdateAura(element, unit, aura, index, position, duration, e
 
     -- aura animation to show each aura is dispelable/stealable
     if (aura.animation) then
-        if (isDispelable or isStealable) then
+        if (isDispellable or isStealable) then
             aura.animation:Play()
             aura.animation.Playing = true
         else

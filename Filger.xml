@@ -1,8 +1,5 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
 
-	<!-- Libraries -->
-	<include file="libs\init.xml"/>
-
 	<!-- Engine	 -->
 	<Script file="core\init.lua"/>
 
@@ -19,9 +16,6 @@
 
 	<!-- Plugins -->
 	<Script file="plugins\tracer.lua"/>
-
-	<!-- Spell List -->
-	<!-- <Include file="spells\init.xml"/> -->
 
 	<!-- Filger -->
 	<Script file="Filger.lua"/>

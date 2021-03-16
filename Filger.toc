@@ -1,6 +1,6 @@
 ## Interface: 11306
 ## Author: Luaerror
-## Credits: Nils Ruesch, Shestak, Affli, Garagar, hidekki, FourOne
+## Credits: Nils Ruesch, Shestak, Affli, Garagar, hidekki, FourOne, Tukz
 ## Version: 1.2
 ## Title: |cffb3ff19Filger Classic|r
 ## Notes: Minimal buff/debuff tracker

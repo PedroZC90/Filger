@@ -4,8 +4,11 @@ local Config = ns.Config
 local Cooldowns = Config.Cooldowns
 local BlackList = Config.BlackList
 
+-- WoW API
 local GetTime = GetTime
 local GetSpellInfo = GetSpellInfo
+local GetInventoryItemLink, GetInventoryItemCooldown  = GetInventoryItemLink, GetInventoryItemCooldown
+local GetItemInfo, GetItemInfoInstant, GetItemCooldown = GetItemInfo, GetItemInfoInstant, GetItemCooldown
 
 table.remove_key = function(table, key)
     local value = table[key]
@@ -53,6 +56,16 @@ function Filger.TableLength(table)
     return count
 end
 
+function Filger.TableStruct(data)
+    for index, element in ipairs(data) do
+        print(index)
+        for key, value in pairs(element) do
+            print(" ", key, value)
+        end
+    end
+    print("length:", Filger.TableLength(data))
+end
+
 -- update aura display timer (text or status bar)
 function Filger.UpdateAuraTimer(self, elapsed)
     self.timeleft = self.timeleft or 0
@@ -92,10 +105,42 @@ function Filger.UpdateAuraTimer(self, elapsed)
     end
 end
 
+local validadeSpellTable = function(unit, spells, spell_table)
+    for _, v in ipairs(spells) do
+        if (v.check) then
+            if (v.spellID) then
+                local name = GetSpellInfo(v.spellID)
+                if (name) then
+                    table.insert(spell_table, v)
+                else
+                    Filger.Debug("spellID (" .. v.spellID .. ") is invalid.")
+                end
+            elseif (v.slotID) then
+                local itemLink = GetInventoryItemLink(unit, v.slotID)
+                if (itemLink) then
+                    table.insert(spell_table, v)
+                else
+                    Filger.Debug("Invalid slotID (" .. v.slotID .. ").")
+                end
+            elseif (v.itemID) then
+                -- method GetItemInfo may not return item information when the games starts
+                -- because some item data may not have been cached from the server.
+                -- to avoid that we need to use GetItemInfoInstant or ItemMixin.
+                local itemID = GetItemInfoInstant(v.itemID)
+                if (itemID) then
+                    table.insert(spell_table, v)
+                else
+                    Filger.Debug("Invalid itemID (" .. v.itemID .. ").")
+                end
+            end
+        end
+    end
+end
+
 -- build cooldown list
 -- concatenates player class spells and all class spells
 -- remove unknown spells
-function Filger.BuildCooldownList()
+function Filger.BuildCooldownList(unit)
     local cooldowns = {}
     local class = Filger.MyClass
 
@@ -103,34 +148,14 @@ function Filger.BuildCooldownList()
     if (not Cooldowns[class]) then Cooldowns[class] = {} end
     if (not Cooldowns["ALL"]) then Cooldowns["ALL"] = {} end
 
-    for spellID, check in pairs(Cooldowns[class]) do
-        if (check) then
-            local name = GetSpellInfo(spellID)
-            if (name) then
-                cooldowns[spellID] = true
-            else
-                Filger.Debug("spellID (" .. spellID .. ") is invalid.")
-            end
-        end
-    end
-
-    for spellID, check in pairs(Cooldowns["ALL"]) do
-        if (check) then
-            local name = GetSpellInfo(spellID)
-            if (name) then
-                cooldowns[spellID] = true
-            else
-                Filger.Debug("spellID (" .. spellID .. ") is invalid.")
-            end
-        end
-    end
+    validadeSpellTable(unit, Cooldowns[class], cooldowns)
+    validadeSpellTable(unit, Cooldowns["ALL"], cooldowns)
 
     return cooldowns
 end
 
 -- filter black list by removing unknown spells
 function Filger.BuildBlackList()
-    local index = 1
     for spellID, check in pairs(BlackList) do
         local name = GetSpellInfo(spellID)
         if (not check or not name) then
@@ -139,6 +164,5 @@ function Filger.BuildBlackList()
             end
             table.remove_key(BlackList, spellID)
         end
-        index = index + 1
     end
 end

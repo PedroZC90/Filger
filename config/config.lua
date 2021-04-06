@@ -18,6 +18,8 @@ Config["General"] = {
     ["BarSpacing"] = 7,                             -- sets space between bars.
     ["ClassColor"] = true,                          -- sets status bar color by class.
 
+    ["HideWellFed"] = true,                         -- enabled filter to hide well fed buff (too many spells with this name)
+
     ["BackdropColor"] = { .05, .05, .05 },
     ["BorderColor"] = { .125, .125, .125 },
 }
@@ -209,36 +211,54 @@ Config["BlackList"] = {
 Config["Cooldowns"] = {
     ["PALADIN"] = {
         -- All
-        [498] = true,               -- Divine Protection
-        [642] = true,               -- Divine Shield
-        [633] = true,               -- Lay on Hands
-        [1022] = true,              -- Blessing of Protection
-        [1044] = true,              -- Blessing of Freedom
-        [6940] = true,              -- Blessing of Sacrifice
+        { spellID = 498, check = true },                -- Divine Protection
+        { spellID = 642, check = true },                -- Divine Shield
+        { spellID = 633, check = true },                -- Lay on Hands
+        { spellID = 1022, check = true },               -- Blessing of Protection
+        { spellID = 1044, check = true },               -- Blessing of Freedom
+        { spellID = 6940, check = true },               -- Blessing of Sacrifice
 
         -- Protection
     },
     ["PRIEST"] = {
         -- All
-        [10060] = true,             -- Power Infusion
+        { spellID = 10060, check = true },             -- Power Infusion
 
         -- Disciplie
-        [14751] = true              -- Inner Focus
+        { spellID = 14751, check = true }              -- Inner Focus
 
         -- Holy
         -- Shadow
     },
     ["WARRIOR"] = {
         -- All
+        { spellID = 1161, check = true },               -- Challenging Shout
+        { spellID = 2565, check = true },               -- Shield Block (Rank 1)
+        { spellID = 3411, check = true },               -- Intervene
+        { spellID = 6544, check = true },               -- Heroic Leap
+        { spellID = 18499, check = true },              -- Berserker Rage
+        { spellID = 97462, check = true },              -- Rallying Cry (Rank 1)
+        { spellID = 190456, check = true },             -- Ignore Pain
+        { spellID = 231847, check = true },             -- Shield Block (Rank 2)
+        { spellID = 316825, check = true },             -- Rallying Cry (Rank 2)
+
         -- Protection
+        { spellID = 871, check = true },                -- Shield Wall
+        { spellID = 12975, check = true },              -- Last Stand
+        { spellID = 23920, check = true },              -- Spell Reflection
+        { spellID = 107574, check = true },             -- Avatar
+        { spellID = 316438, check = true },             -- Avatar (Rank 2)
+        { spellID = 316778, check = true },             -- Ignore Pain (Rank 2)
+        { spellID = 316834, check = true },             -- Shield Wall
+        { spellID = 107570, check = true },             -- Storm Bolt
     },
     ["ALL"] = {
         -- Horde Racials
-        [20549] = true,             -- War Stomp (Tauren)
-        [20572] = true,             -- Blood Fury (Orc)
-        [26297] = true,             -- Berserking (Troll)
+        { spellID = 20549, check = true },             -- War Stomp (Tauren)
+        { spellID = 20572, check = true },             -- Blood Fury (Orc)
+        { spellID = 26297, check = true },             -- Berserking (Troll)
 
         -- Alliance Racials
-        [20594] = true              -- Stoneform (Dwarf)
+        { spellID = 20594, check = true }              -- Stoneform (Dwarf)
     }
 }

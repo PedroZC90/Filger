@@ -4,6 +4,8 @@ local Config = ns.Config
 local Cooldowns = Config["Cooldowns"]
 local BlackList = Config["BlackList"]
 
+local Item = Item
+
 ----------------------------------------------------------------
 -- Development (write anything here)
 ----------------------------------------------------------------
@@ -17,3 +19,14 @@ local BlackList = Config["BlackList"]
 -- print(frame.start, frame.duration)
 
 -- frame:SetScript("OnUpdate", Filger.UpdateAuraTimer)
+
+----------------------------------------------------------------
+-- Item Mixin
+----------------------------------------------------------------
+-- local item = Item:CreateFromItemID(21524)
+
+-- item:ContinueOnItemLoad(function()
+-- 	local name = item:GetItemName()
+-- 	local icon = item:GetItemIcon()
+-- 	print(name, icon) -- "Red Winter Hat", 133169
+-- end)
